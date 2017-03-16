@@ -1,0 +1,52 @@
+#!/usr/bin/env node
+
+// cat a.log | node awkj.js 'console.log($1, $2, $3)'
+
+function eachLine(eachLine, end) {
+  let stdin = process.stdin;
+  stdin.setEncoding('utf8');
+  let line = '';
+  stdin.on('end', ()=>{ line&&eachLine(line); end()});
+  stdin.on('readable', () => {
+    let l = stdin.read();
+    line = line + (l||'');
+    let lines = line.split('\n');
+    line = lines.pop() || ''; // save not complete line
+    lines.filter(f=>f).forEach(eachLine);
+  });
+}
+
+function getArgs() {
+  let cur = 2;
+  let sep = /\s+/;
+  if (process.argv[cur] == '-F') {
+    sep = process.argv[cur+1];
+    cur +=2;
+  }
+  return {sep, cont:process.argv[cur]};
+}
+
+function main() {
+  let {sep, cont} = getArgs();
+  if (!cont || cont[0] == '-') {
+    return console.log('please input function content. current content:', cont);
+  }
+  let G={NR:0}; // 全局数据
+  let [body, end] = cont.split('END'); //用户输入的代码分为两部分，前面的body每行执行，END后面的代码结束时执行
+  eachLine(line=>{
+    G.NR ++; // G.NR为行号
+    let fs = line.split(sep); // 把行切分为字段
+    let obj = {FS:fs.length, $0:line, G, NR:G.NR}; // 构建实参
+    fs.forEach((e,i)=>obj['$'+(i+1)] = e); //构建$1...$n
+    //函数内部需要解构obj，并且解构$1...$n，最多解构到$99
+    G.func = G.func || eval(`obj=>{ 
+            let {${Object.keys(obj).join(',')}, ${new Array(100-fs.length).join('0').split('').map((e,k)=>`$${k+1+fs.length}`).join(',')}} = obj;
+            ${body}
+        }`);
+    G.func(obj); //根据用户输入构建函数并调用
+  }, ()=>{ //文件结束的回调
+    end && eval(`obj=>{let {NR,G}=obj;${end}}`)({NR:G.NR,G}); //构建尾部函数并调用
+  });
+}
+
+main();

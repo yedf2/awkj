@@ -1,0 +1,29 @@
+{
+    "name": "awkj",
+    "version": "1.0.0",
+    "description": "nodejs version of awk",
+    "main": "./awkj",
+    "bin": {
+        "awkj": "./awkj",
+    },
+    "files": [
+        "*"
+    ],
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/yedf/awkj.git"
+    },
+    "keywords": [
+        "version",
+        "npm"
+    ],
+    "author": "dongfuye@163.com",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/yedf/awkj/issues"
+    },
+    "homepage": "https://github.com/yedf/awkj#readme"
+}
