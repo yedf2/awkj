@@ -4,7 +4,7 @@
     "description": "nodejs version of awk",
     "main": "./awkj",
     "bin": {
-        "awkj": "./awkj",
+        "awkj": "./awkj"
     },
     "files": [
         "*"
