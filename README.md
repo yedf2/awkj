@@ -4,13 +4,13 @@ awkj --node版本的awk
 *   使用js，拥有强大的编程能力，无需记忆awk特有语法
 *   高效运行，在一个百万行日志处理的测试中，用时仅比awk多30%
 
-###安装
+####安装
 
 ```sh
   sudo npm -g install awkj  #需要node6+ 环境
 ```
 
-###使用
+####使用
 
 ```sh
   echo -e "1  3\n2 5" | awkj 'console.log($2)'
@@ -23,7 +23,7 @@ awkj --node版本的awk
   echo -e "1  3\n2 5" | awkj 'if(NR==1) {G.sum=0;} G.sum+=parseFloat($2); END console.log(G.sum/NR)'
 ```
 
-###实现
+####实现
 
 核心代码如下：
 ```javascript
