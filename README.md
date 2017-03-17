@@ -36,9 +36,9 @@ awkj --node版本的awk
     fs.forEach((e,i)=>obj['$'+(i+1)] = e); //构建$1...$n
     //函数内部需要解构obj，并且解构$1...$n，最多解构到$99
     G.func = G.func || eval(`obj=>{ 
-            let {${Object.keys(obj).join(',')}, ${new Array(100-fs.length).join('0').split('').map((e,k)=>`$${k+1+fs.length}`).join(',')}} = obj;
-            ${body}
-        }`);
+        let {${Object.keys(obj).join(',')}, ${'a'.repeat(99-fs.length).split('').map((e,k)=>`$${k+1+fs.length}`).join(',')}} = obj;
+        ${body}
+      }`);
     G.func(obj); //根据用户输入构建函数并调用
   }, ()=>{ //文件结束的回调
     end && eval(`obj=>{let {NR,G}=obj;${end}}`)({NR:G.NR,G}); //构建尾部函数并调用
